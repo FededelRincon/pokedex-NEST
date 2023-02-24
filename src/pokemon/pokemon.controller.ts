@@ -8,6 +8,7 @@ export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Post()
+  // @HttpCode( HttpStatus.CREATED )  //si quisiera cambiar el codigo
   create(@Body() createPokemonDto: CreatePokemonDto) {
     return this.pokemonService.create(createPokemonDto);
   }
