@@ -23,11 +23,7 @@ export class PokemonService {
       return pokemon;
       
     } catch (error) {
-      if( error.code === 11000 ){
-        throw new BadRequestException(`Pokemon already exists in DB ${ JSON.stringify( error.keyValue ) }`)
-      }
-      console.log(error)
-      throw new InternalServerErrorException(`can´t create pokemon - check server logs`)
+      this.handleExceptions( error );
     }
     
   }
@@ -62,11 +58,51 @@ export class PokemonService {
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  // version Fernando devolviendo el pokemonUpdated hardcodeado (haciendo solo una busqueda...)
+  async update(term: string, updatePokemonDto: UpdatePokemonDto) {
+
+    const pokemon = await this.findOne( term )
+    if( updatePokemonDto.name ) {
+      updatePokemonDto.name = updatePokemonDto.name.toLowerCase()
+    }
+
+    try {
+      await pokemon.updateOne( updatePokemonDto )
+      return { ...pokemon.toJSON(), ... updatePokemonDto }
+
+    } catch (error) {
+      this.handleExceptions( error );
+    }
+    // se hace asi xq mongo no devuelve lo nuevo, sino q hay q hacer esta "chanchada"
+    // se esparce el el pokemon que es "lo viejo", y se le sobreescribe hardcodeado lo que updatee en la bd...
+    // osea devuelvo mi creacion, pero no lo que me da la DB
   }
+
+  
+  // version Alumno devolviendo el resultado de la DB como realmente esta (pero haciendo 2 busquedas...)
+//   async update(term: string, updatePokemonDto: UpdatePokemonDto) {
+//     const pokemonBusqueda = await this.findOne( term );
+                
+//     if ( updatePokemonDto.name ) 
+//         updatePokemonDto.name = updatePokemonDto.name.toLocaleLowerCase();
+ 
+//     const PokemonActualizado = 
+//     await this.pokemonModel.findByIdAndUpdate(pokemonBusqueda._id, updatePokemonDto, { new: true });
+ 
+//     return PokemonActualizado;
+// }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
   }
+
+
+  private handleExceptions( error: any ){
+    if( error.code === 11000 ){
+      throw new BadRequestException(`Pokemon already exists in DB ${ JSON.stringify( error.keyValue ) }`)
+    }
+    console.log(error)
+    throw new InternalServerErrorException(`can´t update pokemon - check server logs`)
+  }
+
 }
