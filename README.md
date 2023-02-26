@@ -23,9 +23,9 @@ npm add -g @nestjs/cli
 docker-compose up -d
 ```
 
-5. Run seed
+5. Build data base with Seed
 ```
-algo...
+http://localhost:3000/api/v2/seed
 ```
 
 
