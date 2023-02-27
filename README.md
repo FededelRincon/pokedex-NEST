@@ -23,7 +23,12 @@ npm add -g @nestjs/cli
 docker-compose up -d
 ```
 
-5. Build data base with Seed
+5. Rise/upload the data base, with docker-compose
+```
+npm run start:dev
+```
+
+6. Build data base with Seed
 ```
 http://localhost:3000/api/v2/seed
 ```
