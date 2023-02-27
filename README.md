@@ -23,12 +23,17 @@ npm add -g @nestjs/cli
 docker-compose up -d
 ```
 
-5. Rise/upload the data base, with docker-compose
+5. Clone file __.env.template__ and rename copy to __.env__
+
+6. Fill environment variables in .env
+
+
+7. Execute the app en dev, with command:
 ```
 npm run start:dev
 ```
 
-6. Build data base with Seed
+8. Build data base with Seed
 ```
 http://localhost:3000/api/v2/seed
 ```
